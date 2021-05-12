@@ -17,9 +17,7 @@ jobs:
       - run:
           name: make backend infrastructure
           command: |
-            aws cloudformation create-stack \
-                --template-body file://template.yml \
-                --stack-name my-stack \  
+            aws cloudformation create-stack --stack-name myteststack --template-body file://template.yml
   build:
     working_directory: ~/mern-starter
     docker:
