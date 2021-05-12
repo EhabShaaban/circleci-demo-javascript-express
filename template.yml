@@ -3,7 +3,7 @@ Ec2Instance:
  Type: AWS::EC2::Instance
  Properties:
    SecurityGroups:
-     - !Ref InstanceSecurityGroup
+    Ref: "InstanceSecurityGroup"
    KeyName: udacity
    ImageId: ami-03d5c68bab01f3496
 InstanceSecurityGroup:
