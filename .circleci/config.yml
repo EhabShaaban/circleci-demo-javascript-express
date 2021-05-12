@@ -4,9 +4,21 @@ workflows:
   version: 2
   build:
     jobs:
-      - build
+      # - build
+      - create_infrastructure
 
 jobs:
+  create_infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+        name: make backend infrastructure
+        command: |
+          aws cloudformation deploy \
+              --template-file template.yml \
+              --stack-name my-stack          
   build:
     working_directory: ~/mern-starter
     docker:
