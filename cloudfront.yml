@@ -2,7 +2,6 @@ Parameters:
   PipelineID:
     Description: Unique identifier.
     Type: String
-    Default: 564465
 
 Resources:
 
