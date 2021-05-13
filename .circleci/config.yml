@@ -21,6 +21,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
+            
       - run:
           name: Configure server
           command: |
