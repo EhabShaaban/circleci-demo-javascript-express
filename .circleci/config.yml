@@ -20,14 +20,6 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
-      # - run:
-      #     name: Make it yes please
-      #     command: |
-      #       export ANSIBLE_HOST_KEY_CHECKING=False
-      # - run:
-      #     name: echo that please
-      #     command: |
-      #       echo $ANSIBLE_HOST_KEY_CHECKING
       - run:
           name: Configure server
           command: |
