@@ -19,9 +19,69 @@ workflows:
       # - smoke_test:
           # requires:
           #   - configure_infrastructure
-      - roll_back
+      # - roll_back
+      - create_and_deploy_front_end
+      - get_last_deployment_id
+      - promote_to_production
+      - clean_up_old_front_end
 
 jobs:
+  create_and_deploy_front_end:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: create frontend stack and deploy
+          command: |
+            aws cloudformation deploy \
+              --template-file bucket.yml \
+              --stack-name "${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID:0:7}"
+
+  get_last_deployment_id:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: get last deployment id
+          command: |
+            aws cloudformation \
+            list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
+            --no-paginate --output text
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - output.txt
+
+  promote_to_production:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: promote to production
+          command: |
+           aws cloudformation deploy \
+            --template-file cloudfront.yml \
+            --stack-name production-distro \
+            --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
+
+  clean_up_old_front_end:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - attach_workspace:
+          at: ~/
+      - checkout
+      - run:
+          name: clean up old front end
+          command: |
+            aws s3 rm "s3://${OldPipelineID}" --recursive
+            aws cloudformation delete-stack --stack-name "${PreviousPipelineID}"
+            
+
   roll_back:
     docker:
       - image: amazon/aws-cli
