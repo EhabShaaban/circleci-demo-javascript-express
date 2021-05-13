@@ -1,6 +1,6 @@
 ---
 - name: Setting up a web server in an ec2
-  hosts: localhost
+  hosts: all
   user: ubuntu
   roles:
    - prepare
