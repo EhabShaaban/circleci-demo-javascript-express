@@ -22,8 +22,14 @@ workflows:
       # - roll_back
       - create_and_deploy_front_end
       - get_last_deployment_id
+          requires:
+            - create_and_deploy_front_end
       - promote_to_production
+          requires:
+            - get_last_deployment_id
       - clean_up_old_front_end
+          requires:
+            - promote_to_production
 
 jobs:
   create_and_deploy_front_end:
@@ -80,7 +86,7 @@ jobs:
           command: |
             aws s3 rm "s3://${OldPipelineID}" --recursive
             aws cloudformation delete-stack --stack-name "${PreviousPipelineID}"
-            
+
 
   roll_back:
     docker:
