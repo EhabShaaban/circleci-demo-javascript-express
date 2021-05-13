@@ -24,7 +24,7 @@ jobs:
       - run:
           name: Configure server
           command: |
-            ansible-playbook -i ec2-34-222-50-127.us-west-2.compute.amazonaws.com playbook.yml
+            ansible-playbook -i inventory playbook.yml
   create_infrastructure:
     docker:
       - image: amazon/aws-cli
