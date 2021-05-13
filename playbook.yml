@@ -2,7 +2,6 @@
 - name: Setting up a web server in an ec2
   hosts: all
   user: ubuntu
-  become: yes
   roles:
    - prepare
    - setup
