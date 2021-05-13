@@ -17,17 +17,17 @@ workflows:
       # - create_infrastructure
       # - configure_infrastructure
       # - smoke_test:
-          # requires:
-          #   - configure_infrastructure
+      #     requires:
+      #       - configure_infrastructure
       # - roll_back
       - create_and_deploy_front_end
-      - get_last_deployment_id
+      - get_last_deployment_id:
           requires:
             - create_and_deploy_front_end
-      - promote_to_production
+      - promote_to_production:
           requires:
             - get_last_deployment_id
-      - clean_up_old_front_end
+      - clean_up_old_front_end:
           requires:
             - promote_to_production
 
